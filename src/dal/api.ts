@@ -28,10 +28,22 @@ type TrackAttachment = {
   url: string;
 };
 
+const getHeaders = () => {
+  const apiKey = import.meta.env.VITE_API_KEY;
+  if (!apiKey) {
+    return {
+      "api-key": undefined,
+    };
+  }
+  return {
+    "api-key": apiKey,
+  };
+};
+
 export const getTrackDetailsByTrackId = (trackId: string) => {
   const promise: Promise<TrackDetailsOutput> = fetch(
     "https://musicfun.it-incubator.app/api/1.0/playlists/tracks/" + trackId,
-    { headers: { "api-key": "2128989c-130d-4766-aaf4-d0a319a66f59" } }
+    { headers: getHeaders() }
   ).then((response) => response.json());
 
   return promise;
@@ -40,6 +52,6 @@ export const getTrackDetailsByTrackId = (trackId: string) => {
 export const getTracks = (): Promise<TrackListOutput> => {
   return fetch(
     "https://musicfun.it-incubator.app/api/1.0/playlists/tracks?pageNumber=1&pageSize=20&sortBy=publishedAt&sortDirection=desc&paginationType=offset",
-    { headers: { "api-key": "2128989c-130d-4766-aaf4-d0a319a66f59" } }
+    { headers: getHeaders() }
   ).then((response) => response.json());
 };
